@@ -275,7 +275,10 @@ class ExamController extends Controller
         $objWriter = PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save($filename);
 
-        return redirect('/'.$filename);
+        return response()->json([
+            'filename' => $filename,
+            'url' => url($filename)
+        ]);
     }
 
     /* public function list()
