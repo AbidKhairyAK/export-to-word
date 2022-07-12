@@ -222,7 +222,7 @@ class ExamController extends Controller
                 }
 
                 foreach ($question->options as $optionKey => $option) {
-                    $section->addListItem(strip_tags($option->option_text || ''), 1, null, 'multilevel-' . $questionItem->type, [
+                    $section->addListItem($option->option_text ? strip_tags($option->option_text) : '', 1, null, 'multilevel-' . $questionItem->type, [
                         'lineHeight' => 1.15,
                         'keepLines' => true,
                         'keepNext' => $optionKey !== count($question->options) - 1 || !empty($option->type_pict),
@@ -271,13 +271,11 @@ class ExamController extends Controller
             }
         }
 
+        $filename = $exam->exam_title . ', ' . date('Y-m-d', strtotime($exam->exam_start_date)) . '.docx';
         $objWriter = PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        $objWriter->save($exam->exam_title . ', ' . date('Y-m-d', strtotime($exam->exam_start_date)) . '.docx');
+        $objWriter->save($filename);
 
-        return response()->json([
-            'exam' => $exam,
-            'questions' => $questions
-        ]);
+        return redirect('/'.$filename);
     }
 
     /* public function list()
