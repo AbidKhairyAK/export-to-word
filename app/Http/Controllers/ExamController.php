@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Models\Exam;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpWord;
+use Illuminate\Support\Str;
 
 class ExamController extends Controller
 {
@@ -271,7 +272,7 @@ class ExamController extends Controller
             }
         }
 
-        $filename = $exam->exam_title . ', ' . date('Y-m-d', strtotime($exam->exam_start_date)) . '.docx';
+        $filename = Str::slug($exam->exam_title) . '-' . date('Y-m-d', strtotime($exam->exam_start_date)) . '.docx';
         $objWriter = PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save($filename);
 
